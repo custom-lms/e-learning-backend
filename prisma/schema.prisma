@@ -12,3 +12,25 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Class {
+  id      String  @id @default(uuid())
+  name    String  @unique
+  boards  Board[] // One class can have multiple boards
+}
+
+model Board {
+  id        String   @id @default(uuid())
+  name      String
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subjects  Subject[]
+}
+
+model Subject {
+  id       String  @id @default(uuid())
+  name     String
+  boardId  String
+  board    Board   @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  language String  // 'Assamese' or 'English'
+}
