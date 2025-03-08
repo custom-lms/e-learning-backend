@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// This is your Prisma schema file
 
 generator client {
   provider = "prisma-client-js"
@@ -13,34 +9,51 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Class {
-  id      String  @id @default(uuid())
-  name    String  @unique
-  boards  Board[] // One class can have multiple boards
+model Board {
+  id       String   @id @default(uuid())
+  name     String   @unique
+  classes  Class[]
 }
 
-model Board {
-  id        String   @id @default(uuid())
-  name      String
-  classId   String
-  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
-  subjects  Subject[]
+model Class {
+  id       String   @id @default(uuid())
+  name     String   @unique
+  boardId  String
+  board    Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  subjects Subject[]
 }
 
 model Subject {
-  id       String  @id @default(uuid())
+  id       String   @id @default(uuid())
   name     String
-  boardId  String
-  board    Board   @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  language String  // 'Assamese' or 'English'
+  classId  String
+  class    Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  language String   // 'Assamese' or 'English'
+  chapters Chapter[]
+}
+
+model Chapter {
+  id         String   @id @default(uuid())
+  name       String
+  subjectId  String
+  subject    Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  topics     Topic[]
+}
+
+model Topic {
+  id         String   @id @default(uuid())
+  name       String
+  content    String   // This can store text, video links, or other content.
+  chapterId  String
+  chapter    Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id       String  @id @default(uuid())
-  name     String
-  email    String  @unique
-  password String
-  role     Role    @default(STUDENT)
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(STUDENT)
   createdAt DateTime @default(now())
 }
 
