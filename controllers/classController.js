@@ -22,3 +22,23 @@ exports.addClass = async (req, res) => {
     res.status(500).json({ message: "Failed to add class" });
   }
 };
+
+exports.getClassesByBoard = async (req, res) => {
+  const { boardId } = req.params;
+  console.log('Board Id received', boardId);
+  try {
+    const classes = await prisma.class.findMany({
+      where: { boardId },
+    });
+    console.log('Classes found', classes);
+
+    if (!classes.length) {
+      return res.status(404).json({ message: "No classes found for this board" });
+    }
+
+    res.status(200).json(classes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch classes" });
+  }
+};
