@@ -27,3 +27,22 @@ exports.addSubject = async (req, res) => {
     res.status(500).json({ message: "Failed to add subject" });
   }
 };
+
+exports.getSubjectsByClass = async (req, res) => {
+  const { classId } = req.params;
+
+  try {
+    const subjects = await prisma.subject.findMany({
+      where: { classId },
+    });
+
+    if (!subjects.length) {
+      return res.status(404).json({ message: "No subjects found for this class" });
+    }
+
+    res.status(200).json(subjects);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch subjects" });
+  }
+};
