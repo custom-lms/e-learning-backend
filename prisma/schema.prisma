@@ -41,12 +41,15 @@ model Chapter {
 }
 
 model Topic {
-  id         String   @id @default(uuid())
-  name       String
-  content    String   // This can store text, video links, or other content.
-  chapterId  String
-  chapter    Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  id          String   @id @default(uuid())
+  name        String
+  videoUrl    String   // Store S3 URL of the video
+  thumbnailUrl String  // Store S3 URL of the thumbnail
+  description String
+  chapterId   String
+  chapter     Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 }
+
 
 model User {
   id        String   @id @default(uuid())
