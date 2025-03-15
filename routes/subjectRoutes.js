@@ -1,11 +1,10 @@
 const express = require("express");
-const { authenticateUser, authorizeRoles } = require("../middleware/authMiddleware");
-const { addSubject } = require("../controllers/subjectController");
-const { getChaptersBySubject } = require("../controllers/chapterController");
+const { getSubjectsByBoard, addSubject } = require("../controllers/subjectController");
+const { authorizeRoles, authenticateUser } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-router.post("/add", authenticateUser, authorizeRoles("SUPERADMIN"), addSubject);
-router.get("/:subjectId/chapters", getChaptersBySubject);
+router.get("/:boardId", getSubjectsByBoard);
+router.post("/:boardId", authenticateUser, authorizeRoles("SUPERADMIN"), addSubject);
 
 module.exports = router;
