@@ -1,3 +1,8 @@
+enum SubjectType {
+  CORE
+  ELECTIVE
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -28,6 +33,7 @@ model Subject {
   board    Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
   language String   // 'Assamese' or 'English'
   chapters Chapter[]
+  subjectType SubjectType  @default(CORE) // add default if needed
 }
 
 model Chapter {
