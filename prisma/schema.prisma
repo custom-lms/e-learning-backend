@@ -58,7 +58,7 @@ model User {
   id        String   @id @default(uuid())
   name      String
   email     String   @unique
-  password  String
+  password  String?  // optional password
   role      Role     @default(STUDENT)
   createdAt DateTime @default(now())
 }
