@@ -16,3 +16,7 @@ curl -X POST http://localhost:5000/api/subjects/{boardId} \
 
 
 
+### LOGIN as STUDENT (Frontend)
+ - rockteam@gmail.com
+ - 123456
+
