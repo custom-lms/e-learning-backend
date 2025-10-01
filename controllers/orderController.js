@@ -40,6 +40,7 @@ exports.createOrder = async (req, res) => {
   try {
     const {
       fullName,
+      email,
       mobile,
       pincode,
       school,
@@ -53,6 +54,7 @@ exports.createOrder = async (req, res) => {
     const newOrder = await prisma.order.create({
       data: {
         fullName,
+        email,
         mobile,
         pincode,
         school,

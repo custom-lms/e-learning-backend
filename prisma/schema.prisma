@@ -73,6 +73,7 @@ model Order {
   id             Int      @id @default(autoincrement())
   classId        Int
   fullName       String
+  email          String?
   mobile         String
   pincode        String
   school         String?
