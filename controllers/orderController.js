@@ -123,3 +123,20 @@ exports.updateOrder = async (req, res) => {
     res.status(500).json({ error: 'Failed to update order' });
   }
 };
+
+
+// GET /api/orders/user/:email
+exports.getUserOrders = async (req, res) => {
+  try {
+    const orders = await prisma.order.findMany({
+      where: { email: req.params.email, status: "COMPLETED" },
+      include: {
+        class: true, // or 'course' depending on your relation
+      },
+    });
+    res.json(orders);
+  } catch (error) {
+    console.error("Error fetching user orders:", error);
+    res.status(500).json({ message: "Failed to fetch user courses" });
+  }
+};
