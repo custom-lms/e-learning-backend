@@ -16,49 +16,50 @@ model Class {
   id     Int     @id @default(autoincrement())
   name   String  @unique
   boards Board[]
+  orders Order[]
 }
 
 model Board {
-  id      Int     @id @default(autoincrement())
-  name    String
-  classId Int
-  class   Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
+  id       Int       @id @default(autoincrement())
+  name     String
+  classId  Int
+  class    Class     @relation(fields: [classId], references: [id], onDelete: Cascade)
   subjects Subject[]
 }
 
 model Subject {
-  id       String   @id @default(uuid())
-  name     String
-  boardId  Int
-  board    Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  language String   // 'Assamese' or 'English'
-  chapters Chapter[]
-  subjectType SubjectType  @default(CORE) // add default if needed
+  id          String      @id @default(uuid())
+  name        String
+  boardId     Int
+  board       Board       @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  language    String // 'Assamese' or 'English'
+  chapters    Chapter[]
+  subjectType SubjectType @default(CORE) // add default if needed
 }
 
 model Chapter {
-  id         String   @id @default(uuid())
-  name       String
-  subjectId  String
-  subject    Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  topics     Topic[]
+  id        String  @id @default(uuid())
+  name      String
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  topics    Topic[]
 }
 
 model Topic {
-  id           String   @id @default(uuid())
+  id           String  @id @default(uuid())
   name         String
-  videoUrl     String   // Store S3 URL of the video
-  thumbnailUrl String   // Store S3 URL of the thumbnail
+  videoUrl     String // Store S3 URL of the video
+  thumbnailUrl String // Store S3 URL of the thumbnail
   description  String
   chapterId    String
-  chapter      Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapter      Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 }
 
 model User {
   id        String   @id @default(uuid())
   name      String
   email     String   @unique
-  password  String?  // optional password
+  password  String? // optional password
   role      Role     @default(STUDENT)
   createdAt DateTime @default(now())
 }
@@ -70,18 +71,19 @@ enum Role {
 }
 
 model Order {
-  id             Int      @id @default(autoincrement())
-  classId        Int
-  fullName       String
-  email          String?
-  mobile         String
-  pincode        String
-  school         String?
-  electiveIds    String   // Comma-separated or use a relation if needed
-  status         String   @default("PENDING")
-  paymentMode    String?  // e.g., RAZORPAY, UPI
+  id                Int      @id @default(autoincrement())
+  classId           Int
+  class             Class    @relation(fields: [classId], references: [id])
+  fullName          String
+  email             String?
+  mobile            String
+  pincode           String
+  school            String?
+  electiveIds       String // Comma-separated or use a relation if needed
+  status            String   @default("PENDING")
+  paymentMode       String? // e.g., RAZORPAY, UPI
   razorpayPaymentId String?
-  createdAt      DateTime @default(now())
+  createdAt         DateTime @default(now())
 }
 
 enum OrderStatus {
@@ -97,4 +99,3 @@ enum PaymentMode {
   WALLET
   COD
 }
-

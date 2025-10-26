@@ -8,7 +8,14 @@ const prisma = new PrismaClient();
 
 exports.signup = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
+
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
@@ -16,13 +23,14 @@ exports.signup = async (req, res) => {
         name,
         email,
         password: hashedPassword,
-        role,
+        role: "STUDENT", // Default role assignment
       },
     });
 
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({ message: "Account created successfully", user });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Signup Error:", error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
