@@ -25,6 +25,7 @@ model Board {
   classId  Int
   class    Class     @relation(fields: [classId], references: [id], onDelete: Cascade)
   subjects Subject[]
+  orders   Order[]
 }
 
 model Subject {
@@ -73,7 +74,9 @@ enum Role {
 model Order {
   id                Int      @id @default(autoincrement())
   classId           Int
+  boardId           Int?
   class             Class    @relation(fields: [classId], references: [id])
+  board             Board?   @relation(fields: [boardId], references: [id])
   fullName          String
   email             String?
   mobile            String

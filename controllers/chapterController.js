@@ -8,6 +8,9 @@ exports.getChaptersBySubject = async (req, res) => {
   try {
     const chapters = await prisma.chapter.findMany({
       where: { subjectId: subjectId },
+      include: {
+        topics: true, // 👈 Include all related topics
+      },
     });
     res.status(200).json(chapters);
   } catch (error) {

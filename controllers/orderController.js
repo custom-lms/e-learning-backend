@@ -132,6 +132,7 @@ exports.getUserOrders = async (req, res) => {
       where: { email: req.params.email, status: "COMPLETED" },
       include: {
         class: true, // or 'course' depending on your relation
+        board: true,
       },
     });
     res.json(orders);
